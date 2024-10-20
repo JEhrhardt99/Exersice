@@ -1,0 +1,33 @@
+# Introduction -----------------------------------------------------------
+
+## Installing Packages ---------------------------------------------------
+# install.packages("haven") 
+# install.packages("Hmisc") # you can take advantage of some labeling features
+# install.packages("expss") #package integrates value labels support into base R
+# install.packages("dplyr") #data cleaning and manipulation
+# install.packages("forecast")
+# install.packages("fpp3")
+# install.packages("fpp2")
+# install.packages("dplyr")
+# install.packages("lubridate")
+# install.packages("stargazer") #for nicer regression tables
+# install.packages("modelsummary") #for model regression output
+# install.packages("estimatr") #for robust standard errors
+# install.packages("ggplot2") # plots
+# install.packages("tidyverse") #data cleaning and manipulation#data cleaning and manipulation
+# install.packages("zoo")
+# install.packages("xts")
+# install.packages("data.table")
+# install.packages("readr")
+
+
+
+
+## Loading Relevant Packages --------------------------------------------
+library("haven") 
+library("Hmisc") 
+library("expss")
+library("dplyr") 
+library("ggplot2")
+library("tidyverse") 
+library("readr")
