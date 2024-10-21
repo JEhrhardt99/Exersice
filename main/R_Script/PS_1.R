@@ -38,15 +38,26 @@ library(modelsummary)
 # Working Directory -------------------------------------------------------
 
 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) # Set working directory to script location
-setwd("..") # Move up to the project root directory
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) # set working directory to script location
+setwd("../..") # move up to the project root directory
+getwd() # check if wd is the root directory
 
 
 
 
+# Read Data ---------------------------------------------------------------
 
 
 
+# Example for reading data from this repositories root folder:
+
+# data <- read.csv("main/Data_sets/BASF.csv")
+# write.csv(data, "main/Problem_Sets_Output/processed_data.csv")
+
+
+
+
+df_STAN <- read.csv("main/Data_sets/STAN_ALL.csv")
 
 
 
