@@ -139,7 +139,7 @@ df_small <- df_small %>%
 df_small$WAGE_gr <- (df_small$WAGE - df_small$WAGE_lag_1)/df_small$WAGE_lag_1
 
 
-# heatmap
+# heatmapp
 
 vis_dat(df_small)
 
