@@ -62,8 +62,8 @@ getwd() # check if wd is the root directory
 df_STAN <- read.csv("main/Data_sets/STAN_ALL.csv")
 
 
-vis_dat(df_STAN,
-        warn_large_data = FALSE)
+# vis_dat(df_STAN,
+#         warn_large_data = FALSE)
 
 
 
@@ -87,18 +87,32 @@ vis_dat(df_small)
 
 # Nr. 3 -------------------------------------------------------------------
 
+
+# first order the dataframe first after country, then industry and then year
+
 df_small <- df_small[order(df_small$COUNTRY, df_small$INDUSTRY, df_small$YEAR),]
 
 
-### build a group index
 
-df_small$idnr <- df_small %>% group_indices(COUNTRY, INDUSTRY)
 
-### use the group index to get all informations nessacry in one line 
 
-df_small <- df_small %>% group_by(idnr) %>% mutate(VALU_lag_1 = dplyr::lag(VALU, n = 1L, default = NA,))
+# Use group_by() and group_indices create a unique industry id
 
-### calcualte the growth rate of valu added 
+df_small <- df_small %>% 
+  group_by(COUNTRY, INDUSTRY) %>% 
+  mutate(idnr = group_indices())
+
+
+
+# create a variable that is the lag of VALU so everything for the growth rate is in one row
+
+df_small <- df_small %>% 
+  group_by(idnr) %>% 
+  mutate(VALU_lag_1 = dplyr::lag(VALU, n = 1L, default = NA,))
+
+
+
+# calcualte the growth rate of valu added 
 
 df_small$VALU_gr <- (df_small$VALU - df_small$VALU_lag_1)/df_small$VALU_lag_1
 
@@ -109,17 +123,25 @@ df_small$VALU_gr <- (df_small$VALU - df_small$VALU_lag_1)/df_small$VALU_lag_1
 
 
 
+# Nr. 4 -------------------------------------------------------------------
 
 
 
+# create a variable that is the lag of wage so everything for the growth rate is in one row
+
+df_small <- df_small %>% 
+  group_by(idnr) %>% 
+  mutate(WAGE_lag_1 = dplyr::lag(WAGE, n = 1L, default = NA,))
 
 
+# calcualte the growth rate of wages 
+
+df_small$WAGE_gr <- (df_small$WAGE - df_small$WAGE_lag_1)/df_small$WAGE_lag_1
 
 
+# heatmap
 
-
-
-
+vis_dat(df_small)
 
 
 
