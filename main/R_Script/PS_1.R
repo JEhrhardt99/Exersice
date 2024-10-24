@@ -33,6 +33,9 @@ library(estimatr)
 library(modelsummary)
 library(visdat)
 library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(stringr)
 
 
 
@@ -144,4 +147,114 @@ df_small$WAGE_gr <- (df_small$WAGE - df_small$WAGE_lag_1)/df_small$WAGE_lag_1
 vis_dat(df_small)
 
 
+
+
+
+# Nr. 5 -------------------------------------------------------------------
+
+
+df_small2 <- df_small %>% 
+  filter(!is.na(WAGE) | !is.na(VALU))
+
+
+
+vis_dat(df_small2)
+
+
+# Nr. 6 -------------------------------------------------------------------
+
+
+# keep France
+
+df_france_trailer <- df_small2[(df_small2$COUNTRY == "FRA"),]
+
+
+# find out about the Semi-Trailer Industry
+
+unique(df_france_trailer$INDUSTRY)
+
+# can not find the Semi-Trailer Industry like this, so I use stringr package to find it:
+
+find_trailer <- df_france_trailer %>%
+  filter(str_detect(INDUSTRY, "TRAILER")) %>%
+  select(idnr, INDUSTRY)
+
+# => idnr 890 represents the Industry we are looking for
+
+# keep France
+
+df_france_trailer <- df_france_trailer[(df_france_trailer$idnr == 890),]
+
+vis_dat(df_france_trailer)
+
+
+# plot:
+
+
+# Scatterplot
+ggplot(df_france_trailer, aes(x = VALU_gr, y = WAGE_gr)) +
+  geom_point(size = 4, alpha = 0.7) + 
+  labs(
+    title = "Motor Vehicles, Trailers and Semi-Trailers sector",
+    subtitle = "Wage growth and Value growth",
+    x = "Value added groth rates",
+    y = "Wage growth rates",
+    color = "Category"
+  ) +
+  theme_few(base_size = 10) +  # Minimal theme
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(size = 14, hjust = 0.5),
+    legend.position = "top"
+  )
+
+
+
+
+
+
+# Nr. 7 -------------------------------------------------------------------
+
+
+
+ggplot(df_france_trailer, aes(x = YEAR)) +
+  geom_line(aes(y = VALU_gr, color = "Value Growth"), linewidth = 1.2) + 
+  geom_line(aes(y = WAGE_gr, color = "Wage Growth"), linewidth = 1.2) + 
+  labs(
+    title = "Motor Vehicles, Trailers and Semi-Trailers sector",
+    subtitle = "Wage growth and Value growth over time",
+    x = "Year",
+    y = "Growth Rates",
+    color = "Lines:"
+  ) +
+  theme_few(base_size = 10) +  # Minimal theme
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(size = 14, hjust = 0.5),
+    legend.position = "top"
+  )
+
+
+
+# Nr. 8 -------------------------------------------------------------------
+
+mean_VALU_gr <- mean(df_france_trailer$VALU_gr,
+                     na.rm = TRUE)
+
+mean_WAGE_gr <- mean(df_france_trailer$WAGE_gr,
+                     na.rm = TRUE)
+
+
+# show result BIG
+plot.new()
+
+plot.window(xlim = c(0, 10), ylim = c(0, 10))
+
+text(x = 5, y = 6, 
+     labels = paste0("Mean VALU_gr: \n", round(mean_VALU_gr, 7), "\n \n \n \n"), 
+     cex = 2, font = 2) 
+
+text(x = 5, y = 4, 
+     labels = paste0("Mean WAGE_gr: \n", round(mean_WAGE_gr, 7)), 
+     cex = 2, font = 2)
 
