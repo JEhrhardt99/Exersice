@@ -36,6 +36,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(stringr)
+library(zoo)
 
 
 
@@ -75,7 +76,6 @@ df <- read.csv2("main/Data_sets/expo-impo-germany.csv",
 
 df$time
 
-
 # create month variable
 df$month <- gsub(".*m(\\d)", "\\1", df$time)
 
@@ -86,6 +86,50 @@ df$month_name <- month.abb[as.numeric(df$month)]
 # safe year as integer
 df$year <- as.numeric(gsub("^(\\d{4}).*", "\\1", df$time))
 
+
+# use zoo package to create date variable
+df$date <- as.Date(as.yearmon(df$time, format = "%Ym%m"))
+
+# make p_imports and p_exports as numeric 
+df$p_imports <- as.numeric(df$p_imports)
+df$p_exports <- as.numeric(df$p_exports)
+
+
+ggplot(df, aes(x = date)) +
+  geom_line(aes(y = exports, color = "Exports"), linewidth = 1.2) + 
+  geom_line(aes(y = imports, color = "Imports"), linewidth = 1.2) + 
+  labs(
+    title = "Times Series",
+    subtitle = "of German exports and imports",
+    x = "Date",
+    y = "Growth Rates",
+    color = "Lines:"
+  ) +
+  theme_few(base_size = 10) +  # Minimal theme
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(size = 14, hjust = 0.5),
+    legend.position = "top"
+  )
+
+
+
+ggplot(df, aes(x = date)) +
+  geom_line(aes(y = p_exports, color = "% Exports"), linewidth = 1.2) + 
+  geom_line(aes(y = p_imports, color = "% Imports"), linewidth = 1.2) + 
+  labs(
+    title = "Times Series",
+    subtitle = "of German exports and imports",
+    x = "Date",
+    y = "Growth Rates",
+    color = "Lines:"
+  ) +
+  theme_few(base_size = 10) +  # Minimal theme
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(size = 14, hjust = 0.5),
+    legend.position = "top"
+  )
 
 
 
