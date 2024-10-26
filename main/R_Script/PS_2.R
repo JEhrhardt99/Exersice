@@ -141,6 +141,66 @@ ggplot(df, aes(x = date)) +
 
 
 
+# testing around
+
+ts_data <- ts(df)
+
+
+# decomposed <- decompose(ts_data, type = "multiplicative")
+# 
+# ts_data
+
+
+
+# Assuming your data frame is named df
+# Set start and frequency based on your data, assuming monthly data from 2000
+
+
+exports_ts <- ts(df$exports, start = c(2000, 1), frequency = 12)
+
+
+
+## Additative Model
+
+# Decompose the exports time series
+exports_decomp <- decompose(exports_ts)
+# Plot the decomposition
+plot(exports_decomp)
+
+
+# STL decomposition of the exports time series
+exports_stl <- stl(exports_ts, s.window = "periodic")
+# Plot the decomposition
+plot(exports_stl)
+
+
+
+
+
+## Multiplicative Model
+
+# Multiplicative decomposition of the exports time series
+exports_decomp_mult <- decompose(exports_ts, type = "multiplicative")
+# Plot the decomposition
+plot(exports_decomp_mult)
+
+
+
+# Take the log of the time series for multiplicative decomposition using STL
+log_exports_ts <- log(exports_ts)
+# Apply STL decomposition
+exports_stl_mult <- stl(log_exports_ts, s.window = "periodic")
+# Plot the decomposition, and exponentiate components if needed
+plot(exports_stl_mult)
+
+
+
+
+
+
+
+
+
 
 
 
