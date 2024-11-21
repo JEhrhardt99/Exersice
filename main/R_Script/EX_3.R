@@ -347,7 +347,95 @@ stock <- stock %>%
 
 
 
+# using rollmean from the zoo package
+stock <- stock %>%
+  group_by(shares) %>%
+  mutate(sm_5_t1 = rollmean(adj_close,
+                            k = 5,
+                            fill = NA, 
+                            align = "center")) %>%
+  ungroup()
 
 
+# Another way to do it using ma() (moving averages)
+stock <- stock %>%
+  group_by(shares) %>%
+  mutate(sm_5_t2 = ma(adj_close,
+                      order = 5,
+                      centre = TRUE)) %>%
+  ungroup()
+
+
+# What happens with a different order? 
+# -> Moving Averages will be calculated a little different
+stock <- stock %>%
+  group_by(shares) %>%
+  mutate(sm_5_t3 = ma(adj_close,
+                      order = 4,
+                      centre = TRUE)) %>%
+  ungroup()
+
+
+
+# Training Moving Averages
+
+# TMA 15, 38, 200
+
+# let's do it only for the dax
+
+stock_dax <- filter(stock,
+                    shares == "dax")
+
+
+
+stock_dax <- stock_dax %>%
+  mutate(ma_dax15 = rollmean(Open,
+                             k = 15,
+                             align = "right",
+                             fill = NA),
+         ma_dax_38 = rollmean(Open,
+                              k = 38,
+                              align = "right",
+                              fill = NA),
+         ma_dax_200 = rollmean(Open,
+                               k = 200,
+                               align = "right",
+                               fill = NA)
+         )
+
+
+# use ggplot2 to see what we did:
+
+ggplot(stock_dax, 
+       aes(x = Date, y = adj_close)) +
+  geom_line(color = "blue") +
+  geom_line(aes(y = ma_dax15), color = "red") +
+  geom_line(aes(y = ma_dax_38), color = "darkgreen") +
+  geom_line(aes(y = ma_dax_200), color = "grey") +
+  theme_stata() +
+  labs(title = "DAX Time Series",
+       x = "Year",
+       y = "Adjusted Close Price") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+
+# this looks nice, let's add a legend
+ggplot(stock_dax, 
+       aes(x = Date)) +
+  geom_line(aes(y = adj_close, color = "Adj Close")) +
+  geom_line(aes(y = ma_dax15, color = "MA 15")) +
+  geom_line(aes(y = ma_dax_38, color = "MA 38")) +
+  geom_line(aes(y = ma_dax_200, color = "MA 200")) +
+  theme_stata() +
+  labs(title = "DAX Time Series",
+       x = "Year",
+       y = "Adjusted Close Price",
+       color = "Legend") + # Beschriftung für die Legende
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_color_manual(values = c("Adj Close" = "blue", 
+                                "MA 15" = "red", 
+                                "MA 38" = "darkgreen", 
+                                "MA 200" = "grey"))
 
 
