@@ -105,6 +105,8 @@ for (i in 2:nrow(df)) {                 # second to nth row
 # doing it very baic here with base r
 df$rw_nd <- df$y
 
+
+
 for (i in 2:nrow(df)) {                 # second to nth row
   df$rw_nd[i] <- df$rw_nd[i-1] + df$uuid[i]   # 0.9 = constant term (bo) 
 }
@@ -132,6 +134,143 @@ plot(df$rw_nd,
      xlab = "Index",
      ylab = "Value",
      main = "Random Walk without Drift")
+
+
+
+
+
+
+
+
+
+# stationarity test -------------------------------------------------------
+
+
+
+
+
+# ADF test with adf.test --------------------------------------------------
+
+
+# Ho: our ts data set has unit roots (non-stationary)
+# Decision p_value should be < 0.05 to reject Ho
+
+
+
+
+adf.test(df$st)
+
+# p > 0.05, we fail to reject Ho, our ts data set has unit roots (non-stationary)
+
+
+
+# Now run the same test for the random walk with drift
+
+adf.test(df$rw)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
