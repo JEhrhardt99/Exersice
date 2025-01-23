@@ -17,6 +17,7 @@ gold <- read_csv("main/Data_sets/oilgold.csv")
 gold <- gold |>
   mutate(mydate = as.Date(date,format="%d%b%Y"))
 
+str(gold)
 
 # Plot ------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ adf_1
 
 # unitroot_kpss
 library(fpp3)
-unitroot_kpss() #TODO
+unitroot_kpss(gold$goldprice) #TODO
 
 # ADFC Test ---------------------------------------------------------------
 
@@ -172,4 +173,14 @@ arima212 <- Arima(gold$goldprice, order = c(2,1,2), include.drift=FALSE)
 checkresiduals(arima212)
 
 # -> still significant outliers(?)
+
+
+
+
+
+
+
+
+
+
 
