@@ -11,19 +11,14 @@
 # git commit -m "header"
 # git push -u origin main
 
-
 # clear global environment
 rm(list = ls())
 
-
-
 # Packages ----------------------------------------------------------------
-
 
 # Install
 
 # install.packages("tidyverse")
-
 
 # Load
 
@@ -39,10 +34,7 @@ library(cowplot)
 library(urca)
 library(readr)
 
-
-
 # Working Directory -------------------------------------------------------
-
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) # set working directory to script location
 setwd("../..") # move up to the project root directory
@@ -50,8 +42,6 @@ getwd() # check if wd is the root directory
 
 
 # Load Data ---------------------------------------------------------------
-
-
 
 # Simulate Data: ----------------------------------------------------------
 
@@ -80,8 +70,6 @@ ggplot(df, aes(x = t)) +
        y = "Value") +
   theme_stata()
 
-
-
 # Random Walk -------------------------------------------------------------
 
 df <- df %>%
@@ -98,20 +86,14 @@ for (i in 2:nrow(df)) {                 # second to nth row
   df$st[i] <- 0.9 + df$st[i-1] + df$uuid[i]   # 0.9 = constant term (bo) 
 }
 
-
 # Random Walk without Drift -----------------------------------------------
-
 
 # doing it very baic here with base r
 df$rw_nd <- df$y
 
-
-
 for (i in 2:nrow(df)) {                 # second to nth row
   df$rw_nd[i] <- df$rw_nd[i-1] + df$uuid[i]   # 0.9 = constant term (bo) 
 }
-
-
 
 # Plot them togerther -----------------------------------------------------
 
@@ -141,14 +123,7 @@ plot(df$rw_nd,
 par(mfrow=c(1,1))
 
 
-
-
-
-
 # stationarity test -------------------------------------------------------
-
-
-
 
 
 # ADF test with adf.test --------------------------------------------------
@@ -165,8 +140,6 @@ adf.test(df$rw_nd)
 
 unitroot_kpss(df$st)
 unitroot_kpss(df$rw_nd)
-
-
 
 
 # Generate AR and MA Process ----------------------------------------------
@@ -214,11 +187,6 @@ Pacf(df$ar1,
     na.action = na.pass)
 
 
-
-
-
-
-
 # MA(1) -------------------------------------------------------------------
 
 df$ma1 <- df$y
@@ -227,8 +195,6 @@ df <- df %>%
   mutate(
     ma1 = 5 + uuid + lag(0.85 * uuid)
   )
-
-
 
 # plot ma1 with ggplot2
 
@@ -241,8 +207,6 @@ ggplot(df, aes(x = t)) +
   theme_stata()
 
 
-
-
 par(mfrow = c(1 , 2))
 
 Acf(df$ma1,
@@ -252,8 +216,6 @@ Acf(df$ma1,
 Pacf(df$ma1,
      plot = TRUE,
      na.action = na.pass)
-
-
 
 # Simulate MA (5) ---------------------------------------------------------
 # easy and simple way in R
